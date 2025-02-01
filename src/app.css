@@ -1,0 +1,116 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+body {
+	@apply m-0 min-h-screen w-screen bg-neutral-900 p-0 font-sans text-neutral-200;
+}
+
+pre {
+	@apply fixed bottom-0 left-0 z-50 m-0 max-h-screen overflow-y-scroll bg-neutral-800 p-8 text-xs;
+}
+
+.forms {
+	@apply flex flex-row items-center justify-evenly;
+}
+
+form {
+	@apply absolute left-[50%] top-[50%] flex w-4/5 translate-x-[-50%] translate-y-[-50%] flex-col gap-6 md:w-2/5 lg:w-1/5;
+}
+
+form > h1:first-of-type span {
+	/*font-family: 'Covered By Your Grace', serif;*/
+	@apply /*text-6xl*/ mb-2 !important;
+}
+
+form > button:last-of-type {
+	@apply mt-4 !important;
+}
+
+form h2.error {
+	@apply rounded-sm bg-red-900 p-4;
+}
+
+button {
+	@apply cursor-pointer rounded-sm border border-neutral-700 bg-neutral-800 px-4 py-2 text-white duration-150 ease-in-out hover:bg-neutral-900;
+}
+
+*[disabled] {
+	@apply pointer-events-none opacity-50;
+}
+
+label {
+	@apply flex flex-col gap-2;
+}
+
+input {
+	@apply rounded-sm border border-neutral-700 bg-neutral-800 px-4 py-2 text-white duration-150 ease-in-out focus-visible:bg-neutral-900 !important;
+}
+
+h1 {
+	@apply text-3xl;
+}
+
+h2:not(form h2) {
+	@apply text-xl;
+}
+
+main {
+	@apply absolute left-1/2 flex -translate-x-1/2 flex-col items-stretch justify-start gap-8 py-32;
+}
+
+main:not(:has(table)) {
+	@apply w-2/5;
+}
+
+main:has(table) {
+	@apply w-max;
+}
+
+.island-col {
+	@apply flex flex-col rounded-md bg-neutral-800 p-6;
+}
+
+.island-col h1 {
+	@apply pb-4;
+}
+
+.island-col button {
+	@apply mt-4;
+}
+
+.island-col iframe {
+	@apply mb-4 h-96 rounded-lg bg-neutral-900;
+}
+
+.island-col a {
+	@apply underline;
+}
+
+.non-interactable {
+	opacity: 0.25;
+	transition: 0.25s;
+	pointer-events: none;
+	-webkit-user-drag: none;
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	transition: filter 0.25s;
+}
+
+table td div {
+	@apply flex w-48 flex-col p-2;
+}
+
+table td:first-child div {
+	@apply w-20;
+}
+
+table th {
+	@apply py-2 text-start;
+}
+
+table td {
+	@apply border-[1px] text-xs;
+}
