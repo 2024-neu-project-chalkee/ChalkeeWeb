@@ -12,7 +12,7 @@
 			signIn('credentials', { email, password });
 		}}
 	>
-		<h1><span>Chalkee</span> login</h1>
+		<img src="/logo.svg" alt="Chalkee" />
 		<label for="email">
 			Email or Student ID
 			<input name="email" bind:value={email} />

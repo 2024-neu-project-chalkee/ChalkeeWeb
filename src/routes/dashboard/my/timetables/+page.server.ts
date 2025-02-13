@@ -5,6 +5,6 @@ export const load: PageServerLoad = async (event) => {
 	const session = await event.locals.auth();
 
 	return {
-		timetables: await getTimetableInfoFromDb(session?.user?.classId as string)
+		timetables: await getTimetableInfoFromDb(session?.user?.id as string)
 	};
 };

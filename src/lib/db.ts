@@ -22,17 +22,17 @@ export default pool;
 export async function getUserFromDb(email: string, password: string) {
 	try {
 		const { rows } = await pool.query(
-			`SELECT * FROM chalkee.users WHERE email_address = '${email}' OR student_id = '${email}'`
+			`SELECT * FROM users WHERE email = '${email}' OR student_id = '${email}'`
 		);
 
 		if (!rows.length || !(await verify(rows[0].password, password))) return null;
 
 		return {
-			...(({ id, role }) => ({
+			...(({ id, role, email }) => ({
 				id,
-				role
+				role,
+				email
 			}))(rows[0]),
-			email: rows[0].email_address,
 			firstName: rows[0].first_name,
 			lastName: rows[0].last_name,
 			instituteId: rows[0].institute_id,
@@ -44,10 +44,10 @@ export async function getUserFromDb(email: string, password: string) {
 	}
 }
 
-export async function getInstituteInfoFromDb(instituteId: string) {
+export async function getInstituteInfoFromDb(userId: string) {
 	try {
 		const { rows } = await pool.query(
-			`SELECT * FROM chalkee.Institutes WHERE id = '${instituteId}'`
+			`SELECT institutes.name, institutes.location, institutes.website, institutes.phone_number FROM users JOIN institutes ON users.institute_id = institutes.id WHERE users.id = '${userId}'`
 		);
 
 		return {
@@ -59,45 +59,89 @@ export async function getInstituteInfoFromDb(instituteId: string) {
 	}
 }
 
-export async function getClassInfoFromDb(classId: string) {
+export async function getClassInfoFromDb(userId: string) {
 	try {
-		const { rows } = await pool.query(`SELECT * FROM chalkee.Classes WHERE id = '${classId}'`);
+		const { rows } = await pool.query(
+			`SELECT classes.number, classes.letter FROM users JOIN classes ON users.class_id = classes.id WHERE users.id = '${userId}'`
+		);
 
 		return {
-			...(({ number, letter }) => ({ number, letter }))(rows[0]),
-			additionalGroup: rows[0].additional_group
+			...(({ number, letter }) => ({ number, letter }))(rows[0])
 		};
 	} catch {
 		return null;
 	}
 }
 
-export async function getTimetableInfoFromDb(classId: string) {
+export async function getGroupInfoFromDb(userId: string) {
 	try {
 		const { rows } = await pool.query(
-			`
-			SELECT
-
-			Timetables.id,
-			Subjects.name,
-			Timetables.day_of_week,
-			COALESCE(Timetable_changes.period, Timetables.period) AS period,
-			COALESCE(Timetable_changes.room, Timetables.room) AS room,
-			CONCAT(first_name, ' ', last_name) AS teacher_name,
-			COALESCE(Timetable_changes.type, 'Okay') AS status
-
-			FROM chalkee.Timetables
-
-			LEFT JOIN chalkee.Timetable_changes ON Timetables.id = Timetable_changes.timetable_obj_id
-			AND (Timetable_changes.date >= date_trunc('week', current_date) AND Timetable_changes.date < date_trunc('week', current_date) + interval '1 week') IS NOT FALSE
-			LEFT JOIN chalkee.Users ON COALESCE(Timetable_changes.teacher_id, Timetables.teacher_id) = Users.id
-			JOIN chalkee.Subjects ON subject_id = Subjects.id
-
-			WHERE Timetables.class_id = '${classId}'
-
-			ORDER BY day_of_week, period
-			`
+			`SELECT groups.name, groups.grouproom FROM user_groups JOIN groups ON user_groups.group_id = groups.id WHERE user_id = '${userId}'`
 		);
+
+		return rows;
+	} catch {
+		return null;
+	}
+}
+
+export async function getTimetableInfoFromDb(userId: string | null) {
+	try {
+		const { rows } = await pool.query(`
+		WITH user_role AS (
+			SELECT role FROM users WHERE id = '${userId}'
+		) 
+
+		SELECT
+		subjects.name AS subject,
+		timetables.day,
+		timetables.period,
+		CONCAT(users.first_name, ' ', users.last_name) AS name,
+		rooms.name AS room,
+		CASE 
+			WHEN classes.id IS NULL THEN NULL 
+			ELSE CONCAT(classes.number, '.', classes.letter) 
+		END AS class,
+		groups.name AS group,
+		grouprooms.name AS grouproom,
+		classrooms.name AS classroom
+
+		FROM timetables
+
+		LEFT JOIN classes ON timetables.class_id = classes.id
+		LEFT JOIN groups ON timetables.group_id = groups.id
+		LEFT JOIN users ON timetables.teacher_id = users.id
+		LEFT JOIN rooms ON timetables.room_id = rooms.id
+		LEFT JOIN subjects ON timetables.subject_id = subjects.id
+		LEFT JOIN rooms AS classrooms ON classes.classroom = classrooms.id AND classes.id IS NOT NULL
+		LEFT JOIN rooms AS grouprooms ON groups.grouproom = grouprooms.id AND groups.id IS NOT NULL
+
+		WHERE 
+			(
+				(SELECT role FROM user_role) = 'Student' AND (
+					groups.id IN (
+						SELECT group_id
+						FROM user_groups
+						WHERE user_id = '${userId}'
+					)
+					OR classes.id IN (
+						SELECT id
+						FROM classes
+						WHERE id = (
+							SELECT class_id
+							FROM users
+							WHERE id = '${userId}'
+						)
+					)
+				)
+			)
+			OR 
+			(
+				(SELECT role FROM user_role) = 'Teacher' AND (
+					timetables.teacher_id = '${userId}'
+				)
+			);
+		`);
 
 		let timetables = {
 			1: [],
@@ -111,7 +155,7 @@ export async function getTimetableInfoFromDb(classId: string) {
 
 		rows.forEach((o) => {
 			//@ts-ignore
-			timetables[o.day_of_week].push(o);
+			timetables[o.day].push(o);
 		});
 
 		return timetables;

@@ -2,6 +2,10 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+html {
+	@apply scroll-smooth;
+}
+
 body {
 	@apply m-0 min-h-screen w-screen bg-neutral-900 p-0 font-sans text-neutral-200;
 }
@@ -11,16 +15,26 @@ pre {
 }
 
 .forms {
-	@apply flex flex-row items-center justify-evenly;
+	background-image: repeating-radial-gradient(circle at -50px -50px, transparent 0, #111 100px),
+		repeating-linear-gradient(#ffffff55, #111);
+	@apply flex h-screen w-screen flex-row items-center justify-evenly;
 }
 
 form {
-	@apply absolute left-[50%] top-[50%] flex w-4/5 translate-x-[-50%] translate-y-[-50%] flex-col gap-6 md:w-2/5 lg:w-1/5;
+	@apply absolute left-[50%] top-[50%] flex w-4/5 translate-x-[-50%] translate-y-[-50%] flex-col gap-6 rounded-md bg-neutral-900 p-8 md:w-3/5 lg:w-2/4 xl:w-1/4;
 }
 
-form > h1:first-of-type span {
-	/*font-family: 'Covered By Your Grace', serif;*/
-	@apply /*text-6xl*/ mb-2 !important;
+/*form > h1:first-of-type span {
+	font-family: 'Covered By Your Grace', serif;
+	@apply text-6xl mb-2 !important;
+}*/
+
+form > img[alt='Chalkee'] {
+	@apply relative left-1/2 mb-6 h-6 w-1/3 -translate-x-1/2;
+}
+
+form > label {
+	@apply text-sm;
 }
 
 form > button:last-of-type {
@@ -113,4 +127,44 @@ table th {
 
 table td {
 	@apply border-[1px] text-xs;
+}
+
+.dots {
+	@apply fixed left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-row;
+}
+
+.dots > div {
+	@apply h-4 w-4 rounded-full bg-white opacity-0;
+}
+
+.dots > div:first-child {
+	animation: blink 0.5s infinite alternate;
+}
+
+.dots > div:not(:first-child, :last-child) {
+	animation: blink 0.5s infinite 0.25s alternate;
+}
+
+.dots > div:last-child {
+	animation: blink 0.5s infinite 0.5s alternate;
+}
+
+.dots {
+	transition: 0.25s;
+}
+
+@keyframes blink {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@media screen and (max-width: 1000px) {
+	.dots {
+		@apply left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
+		bottom: unset;
+	}
 }

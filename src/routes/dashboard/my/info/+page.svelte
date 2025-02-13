@@ -12,9 +12,27 @@
 		<p>Your student ID: {user?.studentId}</p>
 	{/if}
 	{#if $page.data.class}
-		<p>Class: {$page.data.class.number}.{$page.data.class.letter}</p>
-		{#if $page.data.class.additionalGroup.length}
-			<p>Group(s): {$page.data.class.additionalGroup.replaceAll('_', ' ')}</p>
+		{#if $page.data.session?.user?.role == 'Student'}
+			<p>Class: {$page.data.class.number}.{$page.data.class.letter}</p>
+		{:else}
+			<p>
+				Head teacher of class: {$page.data.class.number}.{$page.data.class.letter}
+			</p>
+		{/if}
+	{/if}
+	{#if $page.data.groups && $page.data.groups.length > 0}
+		{#if $page.data.session?.user?.role == 'Student'}
+			<p>
+				Groups you're in: {$page.data.groups
+					.map((/** @type {{ name: any; }} */ x) => x.name)
+					.join(', ')}
+			</p>
+		{:else}
+			<p>
+				Leader of these groups: {$page.data.groups
+					.map((/** @type {{ name: any; }} */ x) => x.name)
+					.join(', ')}
+			</p>
 		{/if}
 	{/if}
 	<p>You are a {user?.role}.</p>

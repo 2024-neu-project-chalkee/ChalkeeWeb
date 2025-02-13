@@ -2,7 +2,8 @@
 	//@ts-nocheck
 	import { page } from '$app/stores';
 
-	const timetable = $page.data.timetables;
+	let timetable = $page.data.timetables;
+	let mergedData = {};
 
 	const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -36,16 +37,10 @@
 					<td>
 						{#if timetable[day] && timetable[day].some((entry) => entry.period === period)}
 							{#each timetable[day].filter((entry) => entry.period === period) as entry}
-								<div
-									class={entry.status == 'Okay'
-										? ''
-										: entry.status == 'Cancelled'
-											? 'bg-red-500 opacity-35'
-											: 'bg-yellow-300 text-neutral-800'}
-								>
-									<strong>{entry.name}</strong>
-									<span>{entry.room}</span>
-									<span>{entry.teacher_name}</span>
+								<div>
+									<strong>{entry.subject}</strong>
+									<p>{entry.name}</p>
+									<p>{entry.room}</p>
 								</div>
 							{/each}
 						{:else}

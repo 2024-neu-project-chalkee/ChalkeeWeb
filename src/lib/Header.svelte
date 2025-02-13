@@ -3,7 +3,7 @@
 </script>
 
 <header>
-	<span id="logo"> Chalkee </span>
+	<img src="/logo.svg" alt="logo" id="logo" />
 	<nav>
 		{#if $page.data.session}
 			{#if $page.data.session.user?.role == 'Student'}
@@ -27,6 +27,6 @@
 	}
 
 	#logo {
-		@apply text-2xl;
+		@apply h-1/3 text-2xl;
 	}
 </style>
