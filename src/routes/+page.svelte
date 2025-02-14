@@ -17,7 +17,7 @@
 		<h1>
 			What can you do with
 			<img src="/logo.svg" alt="Chalkee" />
-			?
+			as a student?
 		</h1>
 		<div>
 			<div>
@@ -35,8 +35,40 @@
 				<h2>Check your assignments</h2>
 				<img src="/assignment.svg" alt="a" />
 			</div>
+		</div>
+		<h1>
+			What can you do with
+			<img src="/logo.svg" alt="Chalkee" />
+			as a teacher?
+		</h1>
+		<div>
+			<div class="lg:col-span-2">
+				<h2>Hand out assignments and notify students of any events</h2>
+				<div>
+					<img src="/error.svg" alt="a" />
+					<img src="/assignment.svg" alt="a" />
+				</div>
+			</div>
 			<div>
-				<h2>Have a better alternative to...</h2>
+				<h2>Check your timetables</h2>
+				<img src="/calendar_month.svg" alt="a" />
+			</div>
+			<div>
+				<h2>Grade students</h2>
+				<div>
+					<img src="/counter_4.svg" alt="a" />
+					<img src="/counter_5.svg" alt="a" />
+				</div>
+			</div>
+			<div class="lg:col-span-2">
+				<h2>Work from the web or the desktop client</h2>
+				<img src="/devices.svg" alt="a" />
+			</div>
+		</div>
+		<h1>But most importantly...</h1>
+		<div>
+			<div>
+				<h2>Have a better alternative to this</h2>
 				<img src="/kr.svg" alt="a" />
 			</div>
 		</div>
@@ -53,7 +85,7 @@
 	}
 
 	section:first-child {
-		@apply flex h-screen w-full flex-col items-center justify-start gap-8 bg-black;
+		@apply flex h-max min-h-screen w-full flex-col items-center justify-start gap-8 bg-black;
 		background-image: repeating-radial-gradient(circle at -50px -50px, transparent 0, #111 100px),
 			repeating-linear-gradient(#ffffff55, #111);
 		background-attachment: fixed;
@@ -61,7 +93,7 @@
 	}
 
 	section:first-child img {
-		@apply mb-4 h-24;
+		@apply mb-4 max-h-24 w-4/5;
 	}
 
 	section:first-child button {
@@ -77,42 +109,46 @@
 	}
 
 	section:nth-child(2) {
-		@apply flex h-screen w-11/12 flex-col items-start justify-start gap-8 py-12;
+		@apply flex h-max min-h-screen w-11/12 flex-col items-start justify-start gap-8 py-12 md:w-5/6;
 	}
 
 	section:nth-child(2) > h1 {
-		@apply flex flex-row items-center;
+		@apply flex w-full flex-col items-center gap-3 md:w-max md:flex-row md:gap-0;
 	}
 
 	section:nth-child(2) > h1 > img {
-		@apply ml-3 mr-1 inline h-5;
+		@apply mx-3 inline h-5;
 	}
 
 	section:nth-child(2) > div {
-		@apply grid w-full grid-cols-1 gap-4 lg:grid-cols-3;
+		@apply mb-24 grid w-full grid-cols-1 gap-4 lg:grid-cols-3;
 	}
 
 	section:nth-child(2) > div > div {
-		@apply flex h-48 flex-row items-center justify-between gap-12 rounded-md bg-neutral-800 p-12;
+		@apply flex h-max min-h-48 flex-col-reverse items-center justify-between gap-8 rounded-md bg-neutral-800 p-12 md:flex-row;
 	}
 
-	section:nth-child(2) > div > div:last-child {
-		@apply justify-center bg-[#23A5CC] text-white lg:col-span-3;
+	section:nth-child(2) > div > div > h2 {
+		@apply w-full text-center md:w-max md:text-start;
+	}
+
+	section:nth-child(2) > div:last-child > div:last-child {
+		@apply col-span-full justify-center gap-5 bg-[#23A5CC] text-white;
 	}
 
 	section:nth-child(2) > div > div > img {
 		@apply h-16;
 	}
 
-	section:nth-child(2) > div > div:first-child img:last-child {
+	section:nth-child(2) > div > div > div > img:last-child {
 		@apply -translate-y-4;
 	}
 
-	section:nth-child(2) > div > div:first-child img:first-child {
-		@apply h-8 translate-y-4;
+	section:nth-child(2) > div > div > div > img:first-child {
+		@apply h-8 translate-x-1 translate-y-4;
 	}
 
-	section:nth-child(2) > div > div:first-child div {
-		@apply flex h-full max-h-12 flex-row;
+	section:nth-child(2) > div > div > div {
+		@apply flex h-16 max-h-12 flex-row;
 	}
 </style>
