@@ -21,19 +21,11 @@
 		{/if}
 	{/if}
 	{#if $page.data.groups && $page.data.groups.length > 0}
-		{#if $page.data.session?.user?.role == 'Student'}
-			<p>
-				Groups you're in: {$page.data.groups
-					.map((/** @type {{ name: any; }} */ x) => x.name)
-					.join(', ')}
-			</p>
-		{:else}
-			<p>
-				Leader of these groups: {$page.data.groups
-					.map((/** @type {{ name: any; }} */ x) => x.name)
-					.join(', ')}
-			</p>
-		{/if}
+		<p>
+			Groups you're in: {$page.data.groups
+				.map((/** @type {{ name: any; }} */ x) => x.name)
+				.join(', ')}
+		</p>
 	{/if}
 	<p>You are a {user?.role}.</p>
 	<button on:click={() => signOut({ callbackUrl: '/' })}>Sign out</button>
@@ -57,6 +49,8 @@
 		</a>
 	</p>
 	<p>
-		Website: <a href="https://{$page.data.institute.website}/">{$page.data.institute.website}</a>
+		Website: <a target="_blank" href="https://{$page.data.institute.website}/"
+			>{$page.data.institute.website}</a
+		>
 	</p>
 </div>

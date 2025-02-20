@@ -68,7 +68,7 @@
 		<h1>But most importantly...</h1>
 		<div>
 			<div>
-				<h2>Have a better alternative to this</h2>
+				<h2>Have a system that is not</h2>
 				<img src="/kr.svg" alt="a" />
 			</div>
 		</div>
@@ -89,7 +89,6 @@
 		background-image: repeating-radial-gradient(circle at -50px -50px, transparent 0, #111 100px),
 			repeating-linear-gradient(#ffffff55, #111);
 		background-attachment: fixed;
-		animation: infinite 5s hero-bg-pos linear;
 	}
 
 	section:first-child img {
@@ -133,7 +132,15 @@
 	}
 
 	section:nth-child(2) > div:last-child > div:last-child {
-		@apply col-span-full justify-center gap-5 bg-[#23A5CC] text-white;
+		@apply col-span-full flex-col justify-center gap-6 bg-[#23A5CC] md:flex-row md:gap-3;
+	}
+
+	section:nth-child(2) > div:last-child > div:last-child > h2 {
+		@apply text-white;
+	}
+
+	section:nth-child(2) > div:last-child > div:last-child img {
+		@apply h-12;
 	}
 
 	section:nth-child(2) > div > div > img {

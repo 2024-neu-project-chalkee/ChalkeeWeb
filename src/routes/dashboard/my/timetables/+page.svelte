@@ -3,7 +3,6 @@
 	import { page } from '$app/stores';
 
 	let timetable = $page.data.timetables;
-	let mergedData = {};
 
 	const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -15,44 +14,85 @@
 	);
 </script>
 
-<table>
-	<thead>
-		<tr>
-			<th>Period</th>
-			{#each daysOfWeek as day}
-				<th>{day}</th>
-			{/each}
-		</tr>
-	</thead>
-	<tbody>
-		{#each Array.from({ length: maxPeriod }, (_, i) => i + 1) as period}
+<div class="island-col">
+	<table>
+		<thead>
 			<tr>
-				<td>
-					<div>
-						<strong>{period}</strong>
-					</div>
-				</td>
-
-				{#each Array.from({ length: 7 }, (_, dayIndex) => dayIndex + 1) as day}
-					<td>
-						{#if timetable[day] && timetable[day].some((entry) => entry.period === period)}
-							{#each timetable[day].filter((entry) => entry.period === period) as entry}
-								<div>
-									<strong>{entry.subject}</strong>
-									<p>{entry.name}</p>
-									<p>{entry.room}</p>
-								</div>
-							{/each}
-						{:else}
-							<div>
-								<strong>—</strong>
-								<span>—</span>
-								<span>—</span>
-							</div>
-						{/if}
-					</td>
+				<th></th>
+				{#each daysOfWeek as day}
+					<th>{day}</th>
 				{/each}
 			</tr>
-		{/each}
-	</tbody>
-</table>
+		</thead>
+		<tbody>
+			{#each Array.from({ length: maxPeriod }, (_, i) => i + 1) as period}
+				<tr>
+					<td class={period + 6 == new Date().getHours() ? 'bg-neutral-900' : ''}>
+						<div>
+							<strong>{period}</strong>
+						</div>
+					</td>
+
+					{#each Array.from({ length: 7 }, (_, dayIndex) => dayIndex + 1) as day}
+						<td
+							class={day == (!new Date().getDay() ? 7 : new Date().getDay())
+								? 'bg-neutral-900'
+								: ''}
+						>
+							{#if timetable[day] && timetable[day].some((entry) => entry.period === period)}
+								{#each timetable[day].filter((entry) => entry.period === period) as entry}
+									<div
+										class={entry.status != null
+											? entry.status == 'Cancelled'
+												? 'bg-red-600 line-through opacity-50'
+												: entry.status == 'Event'
+													? 'bg-green-600 line-through opacity-50'
+													: 'bg-orange-600'
+											: ''}
+									>
+										<strong>{entry.subject}</strong>
+										{#if $page.data.session.user.role != 'Teacher'}
+											<p
+												class={['Reassigned', 'Substitute'].includes(entry.status)
+													? 'font-bold'
+													: ''}
+											>
+												{entry.name}{@html ['Reassigned', 'Substitute'].includes(entry.status)
+													? '<br>(Substitute teacher)'
+													: ''}
+											</p>
+										{:else}
+											<p
+												class={['Reassigned', 'Substitute'].includes(entry.status)
+													? 'font-bold'
+													: ''}
+											>
+												{entry.group == null ? entry.class : entry.group}{@html [
+													'Reassigned',
+													'Substitute'
+												].includes(entry.status)
+													? ' (Substitute teacher)'
+													: ''}
+											</p>
+										{/if}
+										<p class={['Reassigned', 'Roomswap'].includes(entry.status) ? 'font-bold' : ''}>
+											{entry.room}{['Reassigned', 'Roomswap'].includes(entry.status)
+												? ' (Room change)'
+												: ''}
+										</p>
+									</div>
+								{/each}
+							{:else}
+								<div>
+									<strong>—</strong>
+									<span>—</span>
+									<span>—</span>
+								</div>
+							{/if}
+						</td>
+					{/each}
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+</div>

@@ -1,19 +1,22 @@
 <script>
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 </script>
 
 <header>
-	<img src="/logo.svg" alt="logo" id="logo" />
+	<img on:click={() => goto('/dashboard/')} src="/logo.svg" alt="logo" id="logo" />
 	<nav>
 		{#if $page.data.session}
 			{#if $page.data.session.user?.role == 'Student'}
-				<button>Timetables</button>
+				<button on:click={() => goto('/dashboard/my/timetables')}>Timetables</button>
 				<button>Grades</button>
-				<button>Info</button>
+				<button on:click={() => goto('/dashboard/my/info')}>Info</button>
 			{:else if $page.data.session.user?.role == 'Teacher'}
-				<button>a</button>
+				<button on:click={() => goto('/dashboard/my/timetables')}>Timetables</button>
+				<button>Grades</button>
+				<button on:click={() => goto('/dashboard/my/info')}>Info</button>
 			{:else if $page.data.session.user?.role == 'Principal'}
-				<button>a</button>
+				<button on:click={() => goto('/manage/timetables')}>Manage timetables</button>
 			{:else if $page.data.session.user?.role == 'Admin'}
 				<button>a</button>
 			{/if}
@@ -27,6 +30,6 @@
 	}
 
 	#logo {
-		@apply h-1/3 text-2xl;
+		@apply h-1/3 cursor-pointer text-2xl;
 	}
 </style>

@@ -14,6 +14,16 @@ export const authorizationHandle: Handle = async ({ event, resolve }) => {
 				throw redirect(302, '/dashboard');
 			}
 		}
+
+		if (session.user?.role != 'Principal') {
+			if (event.url.pathname.startsWith('/manage')) {
+				throw redirect(302, '/dashboard');
+			}
+		} else {
+			if (event.url.pathname == '/manage') {
+				throw redirect(302, '/dashboard');
+			}
+		}
 	} else if (event.url.pathname != '/' && !event.url.pathname.startsWith('/signin')) {
 		throw redirect(302, '/signin');
 	}
