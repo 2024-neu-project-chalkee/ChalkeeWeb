@@ -1,11 +1,11 @@
 import {
 	getTimetableOfClassOrGroupFromDb,
-	getTeachersAndPrincipalOfInstituteFromDb,
+	getTeachersAndPrincipalOfInstitutionFromDb,
 	getSubjectsFromDb,
-	getRoomsOfInstituteFromDb,
+	getRoomsOfInstitutionFromDb,
 	modifyLessonModificationInDB,
 	putLessonModificationInDB,
-	putLessonInDefaultTimetableFromDB,
+	putLessonInDefaultTimetableInDB,
 	removeLessonInDefaultTimetableFromDB,
 	removeLessonModificationFromDB
 } from '$lib/db';
@@ -32,9 +32,11 @@ export const load: PageServerLoad = async (event) => {
 						(x) => x.period == event.url.searchParams.get('p')
 					)
 				: null,
-		teachers: await getTeachersAndPrincipalOfInstituteFromDb(session?.user?.instituteId as string),
+		teachers: await getTeachersAndPrincipalOfInstitutionFromDb(
+			session?.user?.institutionId as string
+		),
 		subjects: await getSubjectsFromDb(),
-		rooms: await getRoomsOfInstituteFromDb(session?.user?.instituteId as string)
+		rooms: await getRoomsOfInstitutionFromDb(session?.user?.institutionId as string)
 	};
 };
 
@@ -106,7 +108,7 @@ export const actions: Actions = {
 	},
 	A: async ({ request, params }) => {
 		let form = await request.formData();
-		return await putLessonInDefaultTimetableFromDB(
+		return await putLessonInDefaultTimetableInDB(
 			null,
 			params.id,
 			form.get('d'),

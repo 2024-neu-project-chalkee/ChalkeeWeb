@@ -7,7 +7,7 @@ declare module '@auth/sveltekit' {
 		lastName: string | undefined;
 		firstName: string | undefined;
 		role: string | undefined;
-		instituteId: string | undefined;
+		institutionId: string | undefined;
 		classId: string | undefined;
 		studentId: string | undefined;
 	}
@@ -56,7 +56,7 @@ export const { signIn, signOut, handle } = SvelteKitAuth({
 					firstName: token.firstName as string,
 					lastName: token.lastName as string,
 					role: token.role as string,
-					instituteId: token.instituteId as string,
+					institutionId: token.institutionId as string,
 					classId: token.classId as string,
 					studentId: token.studentId as string
 				});

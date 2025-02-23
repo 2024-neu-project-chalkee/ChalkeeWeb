@@ -36,7 +36,7 @@ export async function getUserFromDb(email: string, password: string) {
 			firstName: rows[0].first_name,
 			lastName: rows[0].last_name,
 			name: `${rows[0].first_name} ${rows[0].last_name}`,
-			instituteId: rows[0].institute_id,
+			institutionId: rows[0].institution_id,
 			classId: rows[0].class_id,
 			studentId: rows[0].student_id
 		};
@@ -45,10 +45,10 @@ export async function getUserFromDb(email: string, password: string) {
 	}
 }
 
-export async function getInstituteInfoFromDb(userId: string) {
+export async function getInstitutionInfoFromDb(userId: string) {
 	try {
 		const { rows } = await pool.query(
-			`SELECT institutes.name, institutes.location, institutes.website, institutes.phone_number FROM users JOIN institutes ON users.institute_id = institutes.id WHERE users.id = $1`,
+			`SELECT institutions.name, institutions.location, institutions.website, institutions.phone_number FROM users JOIN institutions ON users.institution_id = institutions.id WHERE users.id = $1`,
 			[userId]
 		);
 
@@ -212,22 +212,22 @@ export async function getTimetableInfoFromDb(userId: string | null) {
 	}
 }
 
-export async function getTeachersAndPrincipalOfInstituteFromDb(instituteId: string) {
+export async function getTeachersAndPrincipalOfInstitutionFromDb(institutionId: string) {
 	try {
 		const { rows } = await pool.query(
-			`SELECT * FROM users WHERE institute_id = $1 AND role IN ('Teacher', 'Principal')`,
-			[instituteId]
+			`SELECT * FROM users WHERE institution_id = $1 AND role IN ('Teacher', 'Principal')`,
+			[institutionId]
 		);
 
 		return rows.map(
-			({ id, role, email, first_name, last_name, institute_id, class_id, student_id }) => ({
+			({ id, role, email, first_name, last_name, institution_id, class_id, student_id }) => ({
 				id,
 				role,
 				email,
 				firstName: first_name,
 				lastName: last_name,
 				name: `${first_name} ${last_name}`,
-				instituteId: institute_id,
+				institutionId: institution_id,
 				classId: class_id,
 				studentId: student_id
 			})
@@ -247,9 +247,11 @@ export async function getSubjectsFromDb() {
 	}
 }
 
-export async function getRoomsOfInstituteFromDb(instituteId: string) {
+export async function getRoomsOfInstitutionFromDb(institutionId: string) {
 	try {
-		const { rows } = await pool.query(`SELECT * FROM rooms WHERE institute_id = $1`, [instituteId]);
+		const { rows } = await pool.query(`SELECT * FROM rooms WHERE institution_id = $1`, [
+			institutionId
+		]);
 
 		return rows;
 	} catch {
@@ -257,11 +259,11 @@ export async function getRoomsOfInstituteFromDb(instituteId: string) {
 	}
 }
 
-export async function getClassesOfInstituteFromDb(instituteId: string) {
+export async function getClassesOfInstitutionFromDb(institutionId: string) {
 	try {
 		const { rows } = await pool.query(
-			`SELECT id, number, letter FROM classes WHERE institute_id = $1`,
-			[instituteId]
+			`SELECT id, number, letter FROM classes WHERE institution_id = $1`,
+			[institutionId]
 		);
 
 		return rows;
@@ -270,10 +272,10 @@ export async function getClassesOfInstituteFromDb(instituteId: string) {
 	}
 }
 
-export async function getGroupsOfInstituteFromDb(instituteId: string) {
+export async function getGroupsOfInstitutionFromDb(institutionId: string) {
 	try {
-		const { rows } = await pool.query(`SELECT id, name FROM groups WHERE institute_id = $1`, [
-			instituteId
+		const { rows } = await pool.query(`SELECT id, name FROM groups WHERE institution_id = $1`, [
+			institutionId
 		]);
 
 		return rows;
@@ -589,7 +591,7 @@ export async function removeLessonInDefaultTimetableFromDB(
 	}
 }
 
-export async function putLessonInDefaultTimetableFromDB(
+export async function putLessonInDefaultTimetableInDB(
 	classId: string | null,
 	groupId: string | null,
 	day: string,

@@ -9,7 +9,7 @@
 </script>
 
 <div class="island-col">
-	<h1>Manage the timetables of your institute</h1>
+	<h1>Manage the timetables of your institution</h1>
 	<form class="mt-4 flex flex-col gap-8">
 		<div class="flex flex-col gap-2">
 			<h2>Is it a class or a group?</h2>

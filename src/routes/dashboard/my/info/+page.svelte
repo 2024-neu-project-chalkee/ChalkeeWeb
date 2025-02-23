@@ -31,26 +31,26 @@
 	<button on:click={() => signOut({ callbackUrl: '/' })}>Sign out</button>
 </div>
 <div class="island-col">
-	<h1>Information about your institute</h1>
+	<h1>Information about your institution</h1>
 	<iframe
 		style="filter: grayscale(100%) invert(92%) contrast(83%);"
-		src="https://www.google.com/maps?q={$page.data.institute.name};{$page.data.institute
+		src="https://www.google.com/maps?q={$page.data.institution.name};{$page.data.institution
 			.location}&output=embed"
 		title="Maps"
 	></iframe>
-	<p>Name: {$page.data.institute.name}</p>
-	<p>Location: {$page.data.institute.location}</p>
+	<p>Name: {$page.data.institution.name}</p>
+	<p>Location: {$page.data.institution.location}</p>
 	<p>
-		Phone number: <a href="tel:{$page.data.institute.phoneNumber}"
-			>{$page.data.institute.phoneNumber.replace(
+		Phone number: <a href="tel:{$page.data.institution.phoneNumber}"
+			>{$page.data.institution.phoneNumber.replace(
 				/(\()?(\+36|0036|06)?(\))?(-| )?(1|20|2[2-9]|3[0-7]|40|42|4[4-9]|5[2-7]|59|60|62|63|66|68|69|70|7[2-9]|80|8[2-5]|8[7-9]]|90|9[2-9])([\\\/ ])?(\d{6,7}|\d{3}(-| )\d{3,4}|\d{3,4}(-| )\d{3})/g,
 				'$2 $5 $6$7'
 			)}
 		</a>
 	</p>
 	<p>
-		Website: <a target="_blank" href="https://{$page.data.institute.website}/"
-			>{$page.data.institute.website}</a
+		Website: <a target="_blank" href="https://{$page.data.institution.website}/"
+			>{$page.data.institution.website}</a
 		>
 	</p>
 </div>
