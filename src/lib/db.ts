@@ -6,6 +6,7 @@ import {
 } from '$env/static/private';
 import { verify } from 'argon2';
 import pg from 'pg';
+import type { Timetable } from './types';
 
 const pool = new pg.Pool({
 	host: DATABASE_HOST,
@@ -191,7 +192,7 @@ export async function getTimetableInfoFromDb(userId: string | null) {
 			[userId]
 		);
 
-		let timetables = {
+		let timetables: Timetable = {
 			1: [],
 			2: [],
 			3: [],
@@ -202,7 +203,6 @@ export async function getTimetableInfoFromDb(userId: string | null) {
 		};
 
 		rows.forEach((o) => {
-			//@ts-ignore
 			timetables[o.day].push(o);
 		});
 
@@ -359,7 +359,7 @@ export async function getTimetableOfClassOrGroupFromDb(
 	WHERE ${classId == null ? `group_id = '${groupId}'` : `class_id = '${classId}'`};
 	`);
 
-		let timetables = {
+		let timetables: Timetable = {
 			1: [],
 			2: [],
 			3: [],
@@ -370,7 +370,6 @@ export async function getTimetableOfClassOrGroupFromDb(
 		};
 
 		rows.forEach((o) => {
-			//@ts-ignore
 			timetables[o.day].push(o);
 		});
 

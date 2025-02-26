@@ -1,17 +1,21 @@
-<script>
-	//@ts-nocheck
+<script lang="ts">
 	import { page } from '$app/stores';
-
-	let timetable = $page.data.timetables;
-
+	import type { Timetable } from '$lib/types';
 	const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-	let maxPeriod = Math.max(
-		...Object.values(timetable)
-			.flat()
-			.map((entry) => entry.period),
-		8
-	);
+	let maxPeriod = 8;
+
+	let timetable: Timetable = $page.data.timetables || {};
+	$: timetable = $page.data.timetables ? $page.data.timetables : {};
+
+	if (timetable) {
+		maxPeriod = Math.max(
+			...Object.values(timetable)
+				.flat()
+				.map((entry) => entry.period),
+			8
+		);
+	}
 </script>
 
 <div class="island-col">
@@ -51,7 +55,7 @@
 											: ''}
 									>
 										<strong>{entry.subject}</strong>
-										{#if $page.data.session.user.role != 'Teacher'}
+										{#if $page.data.session?.user?.role != 'Teacher'}
 											<p
 												class={['Reassigned', 'Substitute'].includes(entry.status)
 													? 'font-bold'

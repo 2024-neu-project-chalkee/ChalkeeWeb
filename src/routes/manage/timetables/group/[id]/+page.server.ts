@@ -11,6 +11,7 @@ import {
 } from '$lib/db';
 import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+import type { Timetable } from '$lib/types.ts';
 
 export const load: PageServerLoad = async (event) => {
 	const session = await event.locals.auth();
@@ -22,15 +23,19 @@ export const load: PageServerLoad = async (event) => {
 	)
 		throw redirect(302, '/manage/timetables');
 
-	const timetables = await getTimetableOfClassOrGroupFromDb(null, event.params.id);
+	const d = event.url.searchParams.get('d');
+	const p = event.url.searchParams.get('p');
+
+	const timetables: Timetable | null = await getTimetableOfClassOrGroupFromDb(
+		null,
+		event.params.id
+	);
 
 	return {
 		timetables: timetables,
 		lesson:
-			event.url.searchParams.get('d') && event.url.searchParams.get('p')
-				? timetables![event.url.searchParams.get('d')].find(
-						(x) => x.period == event.url.searchParams.get('p')
-					)
+			d && p && !isNaN(Number(d))
+				? timetables?.[Number(d)]?.find((x) => x.period === Number(p)) || null
 				: null,
 		teachers: await getTeachersAndPrincipalOfInstitutionFromDb(
 			session?.user?.institutionId as string
@@ -45,7 +50,15 @@ export const actions: Actions = {
 		let form = await request.formData();
 		let cancelled = form.get('cancelled') == 'on';
 		let event = form.get('event') == 'on';
-		let original = JSON.parse(form.get('original'));
+
+		let originalValue = form.get('original');
+		let original;
+		if (originalValue && typeof originalValue === 'string') {
+			original = JSON.parse(originalValue);
+		} else {
+			original = {};
+		}
+
 		let teacher = form.get('teacher') ?? original.teacher_id;
 		let room = form.get('room') ?? original.room_id;
 		let subject = form.get('subject') ?? original.subject_id;
@@ -53,8 +66,8 @@ export const actions: Actions = {
 		return await modifyLessonModificationInDB(
 			null,
 			params.id,
-			form.get('d'),
-			form.get('p'),
+			form.get('d') as string,
+			form.get('p') as string,
 			teacher,
 			room,
 			subject,
@@ -67,7 +80,15 @@ export const actions: Actions = {
 		let form = await request.formData();
 		let cancelled = form.get('cancelled') == 'on';
 		let event = form.get('event') == 'on';
-		let original = JSON.parse(form.get('original'));
+
+		let originalValue = form.get('original');
+		let original;
+		if (originalValue && typeof originalValue === 'string') {
+			original = JSON.parse(originalValue);
+		} else {
+			original = {};
+		}
+
 		let teacher = form.get('teacher') ?? original.teacher_id;
 		let room = form.get('room') ?? original.room_id;
 		let subject = form.get('subject') ?? original.subject_id;
@@ -75,8 +96,8 @@ export const actions: Actions = {
 		return await putLessonModificationInDB(
 			null,
 			params.id,
-			form.get('d'),
-			form.get('p'),
+			form.get('d') as string,
+			form.get('p') as string,
 			teacher,
 			room,
 			subject,
@@ -89,6 +110,15 @@ export const actions: Actions = {
 		let form = await request.formData();
 		let cancelled = form.get('cancelled') == 'on';
 		let event = form.get('event') == 'on';
+
+		let originalValue = form.get('original');
+		let original;
+		if (originalValue && typeof originalValue === 'string') {
+			original = JSON.parse(originalValue);
+		} else {
+			original = {};
+		}
+
 		let teacher = form.get('teacher') ?? original.teacher_id;
 		let room = form.get('room') ?? original.room_id;
 		let subject = form.get('subject') ?? original.subject_id;
@@ -96,8 +126,8 @@ export const actions: Actions = {
 		return await putLessonModificationInDB(
 			null,
 			params.id,
-			form.get('d'),
-			form.get('p'),
+			form.get('d') as string,
+			form.get('p') as string,
 			teacher,
 			room,
 			subject,
@@ -111,11 +141,11 @@ export const actions: Actions = {
 		return await putLessonInDefaultTimetableInDB(
 			null,
 			params.id,
-			form.get('d'),
-			form.get('p'),
-			form.get('teacher'),
-			form.get('room'),
-			form.get('subject')
+			form.get('d') as string,
+			form.get('p') as string,
+			form.get('teacher') as string,
+			form.get('room') as string,
+			form.get('subject') as string
 		);
 	},
 	D: async ({ request, params }) => {
@@ -123,12 +153,17 @@ export const actions: Actions = {
 		return await removeLessonInDefaultTimetableFromDB(
 			null,
 			params.id,
-			form.get('d'),
-			form.get('p')
+			form.get('d') as string,
+			form.get('p') as string
 		);
 	},
 	R: async ({ request, params }) => {
 		let form = await request.formData();
-		return await removeLessonModificationFromDB(null, params.id, form.get('d'), form.get('p'));
+		return await removeLessonModificationFromDB(
+			null,
+			params.id,
+			form.get('d') as string,
+			form.get('p') as string
+		);
 	}
 };

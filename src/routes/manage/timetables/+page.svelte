@@ -18,7 +18,7 @@
 					type="radio"
 					name="corg"
 					checked={corg == 'c'}
-					on:change={(e) => (corg = e.target['value'])}
+					on:change={(e) => (corg = (e.target as HTMLInputElement).value)}
 					value="c"
 				/>
 				Class
@@ -28,7 +28,7 @@
 					type="radio"
 					name="corg"
 					checked={corg == 'g'}
-					on:change={(e) => (corg = e.target['value'])}
+					on:change={(e) => (corg = (e.target as HTMLInputElement).value)}
 					value="g"
 				/>
 				Group

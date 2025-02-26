@@ -49,7 +49,7 @@ div.forms > form h2.error {
 	@apply rounded-sm bg-red-900 p-4;
 }
 
-button {
+button:not(td button) {
 	@apply cursor-pointer rounded-sm border border-neutral-700 bg-neutral-800 px-4 py-2 text-white duration-150 ease-in-out hover:bg-neutral-900;
 }
 
@@ -106,7 +106,7 @@ main:has(table) {
 	@apply pb-4;
 }
 
-.island-col button {
+.island-col button:not(td button) {
 	@apply mt-4;
 }
 
@@ -114,7 +114,7 @@ main:has(table) {
 	@apply mb-4 h-96 rounded-lg bg-neutral-900;
 }
 
-.island-col a:not(table a) {
+.island-col a {
 	@apply underline;
 }
 
@@ -134,7 +134,7 @@ table {
 	@apply border-separate border-spacing-0;
 }
 
-table td a,
+table td button,
 table td div {
 	@apply flex w-48 flex-col p-2;
 }

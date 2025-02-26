@@ -1,7 +1,11 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
 	import { signOut } from '@auth/sveltekit/client';
 	let user = $page.data.session?.user;
+
+	type Group = {
+		name: string;
+	};
 </script>
 
 <div class="island-col">
@@ -22,9 +26,7 @@
 	{/if}
 	{#if $page.data.groups && $page.data.groups.length > 0}
 		<p>
-			Groups you're in: {$page.data.groups
-				.map((/** @type {{ name: any; }} */ x) => x.name)
-				.join(', ')}
+			Groups you're in: {$page.data.groups.map((x: Group) => x.name).join(', ')}
 		</p>
 	{/if}
 	<p>You are a {user?.role}.</p>

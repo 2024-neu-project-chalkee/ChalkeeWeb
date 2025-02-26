@@ -1,19 +1,23 @@
-<script>
+<script lang="ts">
 	import { enhance } from '$app/forms';
-	import { goto, invalidate, invalidateAll } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
+	import type { Timetable } from '$lib/types';
 
 	const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-	let maxPeriod = 0;
+	let maxPeriod = 8;
+
+	let timetable: Timetable = $page.data.timetables || {};
+	$: timetable = $page.data.timetables ? $page.data.timetables : {};
 
 	let l = '';
 	$: c = $page.data.lesson ? $page.data.lesson['status'] == 'Cancelled' : false;
 	$: e = $page.data.lesson ? $page.data.lesson['status'] == 'Event' : false;
 
-	if ($page.data.timetables) {
+	if (timetable) {
 		maxPeriod = Math.max(
-			...Object.values($page.data.timetables)
+			...Object.values(timetable)
 				.flat()
 				.map((entry) => entry.period),
 			8
@@ -248,7 +252,7 @@
 					<button>Submit change</button>
 				</div>
 			</form>
-		{:else if $page.data.timetables}
+		{:else if timetable}
 			<table>
 				<thead>
 					<tr>
@@ -268,9 +272,8 @@
 							</td>
 
 							{#each Array.from({ length: 7 }, (_, dayIndex) => dayIndex + 1) as day}
-								{#if $page.data.timetables[day] && $page.data.timetables[day].some((entry) => entry.period === period)}
-									{#each $page.data.timetables[day].filter((entry) => entry.period === period) as entry}
-										<!-- svelte-ignore a11y_no_static_element_interactions -->
+								{#if timetable[day] && timetable[day].some((entry) => entry.period === period)}
+									{#each timetable[day].filter((entry) => entry.period === period) as entry}
 										<td
 											class={`${
 												entry.status != null
@@ -282,9 +285,7 @@
 													: 'hover:bg-neutral-600'
 											} transition-colors`}
 										>
-											<!-- svelte-ignore a11y_missing_attribute -->
-											<!-- svelte-ignore a11y_click_events_have_key_events -->
-											<a
+											<button
 												on:click={() => goto(`?d=${day}&p=${period}`, { invalidateAll: true })}
 												class="cursor-pointer"
 											>
@@ -322,22 +323,19 @@
 														? ' (Room change)'
 														: ''}
 												</p>
-											</a>
+											</button>
 										</td>
 									{/each}
 								{:else}
-									<!-- svelte-ignore a11y_no_static_element_interactions -->
 									<td>
-										<!-- svelte-ignore a11y_click_events_have_key_events -->
-										<!-- svelte-ignore a11y_missing_attribute -->
-										<a
+										<button
 											class="cursor-pointer transition-colors hover:bg-neutral-600"
 											on:click={() => goto(`?d=${day}&p=${period}`, { invalidateAll: true })}
 										>
 											<strong>—</strong>
 											<span>—</span>
 											<span>—</span>
-										</a>
+										</button>
 									</td>
 								{/if}
 							{/each}
