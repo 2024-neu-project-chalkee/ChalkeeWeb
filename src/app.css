@@ -28,11 +28,6 @@ div.forms > form {
 	@apply absolute left-[50%] top-[50%] flex w-4/5 translate-x-[-50%] translate-y-[-50%] flex-col gap-6 rounded-md bg-neutral-900 p-8 md:w-3/5 lg:w-2/4 xl:w-1/4;
 }
 
-/*form > h1:first-of-type span {
-	font-family: 'Covered By Your Grace', serif;
-	@apply text-6xl mb-2 !important;
-}*/
-
 div.forms > form > img[alt='Chalkee'] {
 	@apply relative left-1/2 mb-6 h-6 w-1/3 -translate-x-1/2;
 }
@@ -49,7 +44,7 @@ div.forms > form h2.error {
 	@apply rounded-sm bg-red-900 p-4;
 }
 
-button:not(td button) {
+button:not(td button, button:has(#logo)) {
 	@apply cursor-pointer rounded-sm border border-neutral-700 bg-neutral-800 px-4 py-2 text-white duration-150 ease-in-out hover:bg-neutral-900;
 }
 
@@ -75,7 +70,7 @@ select {
 }
 
 select {
-	@apply w-4/12;
+	@apply w-8/12 md:w-4/12;
 }
 
 h1 {
@@ -87,27 +82,35 @@ h2:not(form h2) {
 }
 
 main {
-	@apply absolute left-1/2 flex -translate-x-1/2 flex-col items-stretch justify-start gap-8 py-32;
+	@apply absolute left-1/2 flex -translate-x-1/2 flex-col items-stretch justify-start gap-8 pb-12 pt-6 md:py-32;
 }
 
 main:not(:has(table)) {
-	@apply w-2/5;
+	@apply mt-24 w-11/12 md:mt-0 md:w-5/12;
 }
 
 main:has(table) {
-	@apply w-max;
+	@apply w-11/12 2xl:w-max;
 }
 
 .island-col {
 	@apply flex flex-col rounded-md bg-neutral-800 p-6;
 }
 
+.island-col:has(table) {
+	@apply mt-24 md:mt-0;
+}
+
 .island-col h1 {
 	@apply pb-4;
 }
 
-.island-col button:not(td button) {
+.island-col button:only-of-type:not(td button) {
 	@apply mt-4;
+}
+
+.island-col div:has(button):not(:has(select)) {
+	@apply mt-4 flex flex-col flex-wrap gap-2 md:flex-row;
 }
 
 .island-col iframe {
@@ -136,16 +139,16 @@ table {
 
 table td button,
 table td div {
-	@apply flex w-48 flex-col p-2;
+	@apply flex w-full min-w-48 flex-col p-2;
 }
 
 table td,
 table th {
-	@apply text-center;
+	@apply p-2 text-center 2xl:p-0;
 }
 
 table td:first-child div {
-	@apply w-10;
+	@apply w-8 min-w-0 2xl:w-10;
 }
 
 table th {
@@ -170,6 +173,14 @@ table tr:first-child td:first-child {
 
 table tr:first-child td:last-child {
 	@apply rounded-tr-md;
+}
+
+table tr td:first-child {
+	@apply w-4 2xl:w-10;
+}
+
+table tr td:first-child div {
+	@apply w-full text-center 2xl:w-10;
 }
 
 .dots {
@@ -209,5 +220,9 @@ table tr:first-child td:last-child {
 	.dots {
 		@apply left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
 		bottom: unset;
+	}
+
+	* {
+		@apply text-sm;
 	}
 }

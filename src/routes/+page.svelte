@@ -77,7 +77,7 @@
 
 <style>
 	main {
-		@apply absolute left-1/2 top-0 flex h-max min-h-screen w-screen -translate-x-1/2 flex-col items-center justify-start gap-6 p-0 text-white;
+		@apply absolute left-1/2 top-0 my-0 flex h-max min-h-screen w-screen -translate-x-1/2 flex-col items-center justify-start gap-6 p-0 text-white;
 	}
 
 	section:first-child > *:first-child {

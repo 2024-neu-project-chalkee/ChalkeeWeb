@@ -1,8 +1,8 @@
 import {
-	getTimetableOfClassOrGroupFromDb,
-	getTeachersAndPrincipalOfInstitutionFromDb,
-	getSubjectsFromDb,
-	getRoomsOfInstitutionFromDb,
+	getTimetableOfClassOrGroupFromDB,
+	getTeachersAndPrincipalOfInstitutionFromDB,
+	getSubjectsFromDB,
+	getRoomsOfInstitutionFromDB,
 	modifyLessonModificationInDB,
 	putLessonModificationInDB,
 	putLessonInDefaultTimetableInDB,
@@ -26,7 +26,7 @@ export const load: PageServerLoad = async (event) => {
 	const d = event.url.searchParams.get('d');
 	const p = event.url.searchParams.get('p');
 
-	const timetables: Timetable | null = await getTimetableOfClassOrGroupFromDb(
+	const timetables: Timetable | null = await getTimetableOfClassOrGroupFromDB(
 		event.params.id,
 		null
 	);
@@ -37,11 +37,11 @@ export const load: PageServerLoad = async (event) => {
 			d && p && !isNaN(Number(d))
 				? timetables?.[Number(d)]?.find((x) => x.period === Number(p)) || null
 				: null,
-		teachers: await getTeachersAndPrincipalOfInstitutionFromDb(
+		teachers: await getTeachersAndPrincipalOfInstitutionFromDB(
 			session?.user?.institutionId as string
 		),
-		subjects: await getSubjectsFromDb(),
-		rooms: await getRoomsOfInstitutionFromDb(session?.user?.institutionId as string)
+		subjects: await getSubjectsFromDB(),
+		rooms: await getRoomsOfInstitutionFromDB(session?.user?.institutionId as string)
 	};
 };
 

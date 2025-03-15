@@ -1,27 +1,20 @@
 <script>
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import Sidebar from './Sidebar.svelte';
+	import { sidebarOpen } from './sidebar';
 </script>
 
 <header>
-	<img on:click={() => goto('/dashboard/')} src="/logo.svg" alt="logo" id="logo" />
-	<nav>
-		{#if $page.data.session}
-			{#if $page.data.session.user?.role == 'Student'}
-				<button on:click={() => goto('/dashboard/my/timetables')}>Timetables</button>
-				<button>Grades</button>
-				<button on:click={() => goto('/dashboard/my/info')}>Info</button>
-			{:else if $page.data.session.user?.role == 'Teacher'}
-				<button on:click={() => goto('/dashboard/my/timetables')}>Timetables</button>
-				<button>Grades</button>
-				<button on:click={() => goto('/dashboard/my/info')}>Info</button>
-			{:else if $page.data.session.user?.role == 'Principal'}
-				<button on:click={() => goto('/manage/timetables')}>Manage timetables</button>
-			{:else if $page.data.session.user?.role == 'Admin'}
-				<button>a</button>
-			{/if}
-		{/if}
+	<button on:click={() => goto('/dashboard/')}><img id="logo" src="/logo.svg" alt="logo" /></button>
+	<nav class={$sidebarOpen ? 'transition-all md:pr-80' : 'transition-all'}>
+		<button on:click={() => sidebarOpen.set(!$sidebarOpen)}
+			><img
+				src={$sidebarOpen ? '/close.svg' : '/menu.svg'}
+				alt={$sidebarOpen ? 'close' : 'open'}
+			/></button
+		>
 	</nav>
+	<Sidebar />
 </header>
 
 <style>
@@ -30,6 +23,18 @@
 	}
 
 	#logo {
-		@apply h-1/3 cursor-pointer text-2xl;
+		@apply h-full cursor-pointer text-2xl;
+	}
+
+	button {
+		@apply z-50 h-1/3 border-0 hover:bg-transparent !important;
+	}
+
+	nav {
+		@apply z-50;
+	}
+
+	nav button img {
+		@apply h-10;
 	}
 </style>

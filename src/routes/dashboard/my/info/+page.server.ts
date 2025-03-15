@@ -1,12 +1,12 @@
-import { getClassInfoFromDb, getGroupInfoFromDb, getInstitutionInfoFromDb } from '$lib/db';
+import { getClassInfoFromDB, getGroupInfoFromDB, getInstitutionInfoFromDB } from '$lib/db';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
 	const session = await event.locals.auth();
 
 	return {
-		institution: await getInstitutionInfoFromDb(session?.user?.id as string),
-		class: await getClassInfoFromDb(session?.user?.id as string),
-		groups: await getGroupInfoFromDb(session?.user?.id as string)
+		institution: await getInstitutionInfoFromDB(session?.user?.id as string),
+		class: await getClassInfoFromDB(session?.user?.id as string),
+		groups: await getGroupInfoFromDB(session?.user?.id as string)
 	};
 };

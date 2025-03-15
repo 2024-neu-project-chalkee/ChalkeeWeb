@@ -12,6 +12,8 @@ function formatPageTitle(url: string) {
 
 	title = title.charAt(0).toUpperCase() + title.slice(1);
 
+	if (title.includes('Manage timetables')) title = 'Manage timetables';
+
 	return title;
 }
 

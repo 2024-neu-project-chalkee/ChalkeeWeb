@@ -29,7 +29,7 @@
 			Groups you're in: {$page.data.groups.map((x: Group) => x.name).join(', ')}
 		</p>
 	{/if}
-	<p>You are a {user?.role}.</p>
+	<p>You are {user?.role == 'Admin' ? `an Admin` : `a ${user?.role}`}.</p>
 	<button on:click={() => signOut({ callbackUrl: '/' })}>Sign out</button>
 </div>
 <div class="island-col">

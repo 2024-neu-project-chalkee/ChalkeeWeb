@@ -20,7 +20,7 @@ const pool = new pg.Pool({
 
 export default pool;
 
-export async function getUserFromDb(email: string, password: string) {
+export async function getUserFromDB(email: string, password: string) {
 	try {
 		const { rows } = await pool.query(`SELECT * FROM users WHERE email = $1 OR student_id = $1`, [
 			email
@@ -46,7 +46,7 @@ export async function getUserFromDb(email: string, password: string) {
 	}
 }
 
-export async function getInstitutionInfoFromDb(userId: string) {
+export async function getInstitutionInfoFromDB(userId: string) {
 	try {
 		const { rows } = await pool.query(
 			`SELECT institutions.name, institutions.location, institutions.website, institutions.phone_number FROM users JOIN institutions ON users.institution_id = institutions.id WHERE users.id = $1`,
@@ -62,7 +62,7 @@ export async function getInstitutionInfoFromDb(userId: string) {
 	}
 }
 
-export async function getClassInfoFromDb(userId: string) {
+export async function getClassInfoFromDB(userId: string) {
 	try {
 		const { rows } = await pool.query(
 			`SELECT classes.number, classes.letter FROM users JOIN classes ON users.class_id = classes.id WHERE users.id = $1`,
@@ -77,7 +77,7 @@ export async function getClassInfoFromDb(userId: string) {
 	}
 }
 
-export async function getGroupInfoFromDb(userId: string) {
+export async function getGroupInfoFromDB(userId: string) {
 	try {
 		const { rows } = await pool.query(
 			`SELECT groups.name, groups.grouproom FROM user_groups JOIN groups ON user_groups.group_id = groups.id WHERE user_id = $1`,
@@ -90,7 +90,7 @@ export async function getGroupInfoFromDb(userId: string) {
 	}
 }
 
-export async function getTimetableInfoFromDb(userId: string | null) {
+export async function getTimetableInfoFromDB(userId: string | null) {
 	try {
 		const { rows } = await pool.query(
 			`
@@ -212,7 +212,7 @@ export async function getTimetableInfoFromDb(userId: string | null) {
 	}
 }
 
-export async function getTeachersAndPrincipalOfInstitutionFromDb(institutionId: string) {
+export async function getTeachersAndPrincipalOfInstitutionFromDB(institutionId: string) {
 	try {
 		const { rows } = await pool.query(
 			`SELECT * FROM users WHERE institution_id = $1 AND role IN ('Teacher', 'Principal')`,
@@ -237,7 +237,7 @@ export async function getTeachersAndPrincipalOfInstitutionFromDb(institutionId: 
 	}
 }
 
-export async function getSubjectsFromDb() {
+export async function getSubjectsFromDB() {
 	try {
 		const { rows } = await pool.query(`SELECT * FROM subjects`);
 
@@ -247,7 +247,7 @@ export async function getSubjectsFromDb() {
 	}
 }
 
-export async function getRoomsOfInstitutionFromDb(institutionId: string) {
+export async function getRoomsOfInstitutionFromDB(institutionId: string) {
 	try {
 		const { rows } = await pool.query(`SELECT * FROM rooms WHERE institution_id = $1`, [
 			institutionId
@@ -259,7 +259,7 @@ export async function getRoomsOfInstitutionFromDb(institutionId: string) {
 	}
 }
 
-export async function getClassesOfInstitutionFromDb(institutionId: string) {
+export async function getClassesOfInstitutionFromDB(institutionId: string) {
 	try {
 		const { rows } = await pool.query(
 			`SELECT id, number, letter FROM classes WHERE institution_id = $1`,
@@ -272,7 +272,7 @@ export async function getClassesOfInstitutionFromDb(institutionId: string) {
 	}
 }
 
-export async function getGroupsOfInstitutionFromDb(institutionId: string) {
+export async function getGroupsOfInstitutionFromDB(institutionId: string) {
 	try {
 		const { rows } = await pool.query(`SELECT id, name FROM groups WHERE institution_id = $1`, [
 			institutionId
@@ -284,7 +284,7 @@ export async function getGroupsOfInstitutionFromDb(institutionId: string) {
 	}
 }
 
-export async function getTimetableOfClassOrGroupFromDb(
+export async function getTimetableOfClassOrGroupFromDB(
 	classId: string | null,
 	groupId: string | null
 ) {
@@ -604,6 +604,74 @@ export async function putLessonInDefaultTimetableInDB(
 			`INSERT INTO timetables (${classId == null ? 'group_id' : 'class_id'}, teacher_id, subject_id, room_id, day, period) VALUES ($1, $2, $3, $4, $5, $6)`,
 			[classId ?? groupId, teacher_id, subject_id, room_id, day, period]
 		);
+
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+export async function putUserIntoInstitutionInDB(
+	email: string,
+	password: string,
+	firstName: string,
+	lastName: string,
+	institutionId: string,
+	classId: string | null,
+	role: string,
+	studentId: string | null
+) {
+	try {
+		pool.query(
+			`INSERT INTO users (email, password, first_name, last_name, institution_id, class_id, role, student_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+			[email, password, firstName, lastName, institutionId, classId, role, studentId]
+		);
+
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+export async function putRoomIntoInstitutionInDB(name: string, institutionId: string) {
+	try {
+		pool.query(`INSERT INTO rooms (name, institution_id) VALUES ($1, $2)`, [name, institutionId]);
+
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+export async function putClassInInstitutionInDB(
+	number: string,
+	letter: string,
+	classroom: string | null,
+	institutionId: string
+) {
+	try {
+		pool.query(
+			`INSERT INTO classes (number, letter, classroom, institution_id) VALUES ($1, $2, $3, $4)`,
+			[number, letter, classroom, institutionId]
+		);
+
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+export async function putGroupInInstitutionInDB(
+	name: string,
+	grouproom: string | null,
+	institutionId: string
+) {
+	try {
+		pool.query(`INSERT INTO groups (name, grouproom, institution_id) VALUES ($1, $2, $3)`, [
+			name,
+			grouproom,
+			institutionId
+		]);
 
 		return true;
 	} catch {

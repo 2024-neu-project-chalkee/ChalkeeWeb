@@ -1,6 +1,6 @@
 import { SvelteKitAuth } from '@auth/sveltekit';
 import Credentials from '@auth/sveltekit/providers/credentials';
-import { getUserFromDb } from '$lib/db';
+import { getUserFromDB } from '$lib/db';
 
 declare module '@auth/sveltekit' {
 	interface User {
@@ -33,7 +33,7 @@ export const { signIn, signOut, handle } = SvelteKitAuth({
 				)
 					return user;
 
-				user = await getUserFromDb(credentials.email, credentials.password);
+				user = await getUserFromDB(credentials.email, credentials.password);
 
 				return user;
 			}

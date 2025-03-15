@@ -9,10 +9,17 @@ export const authorizationHandle: Handle = async ({ event, resolve }) => {
 		if (event.url.pathname == '/' || event.url.pathname.startsWith('/signin'))
 			throw redirect(302, '/dashboard');
 
-		if (session.user!.role != 'Admin') {
-			if (event.url.pathname.startsWith('/admin')) {
-				throw redirect(302, '/dashboard');
-			}
+		if (session.user!.role != 'Admin' && event.url.pathname.startsWith('/admin'))
+			throw redirect(302, '/dashboard');
+
+		if (session.user!.role != 'Student' && event.url.pathname == '/dashboard/my/grades')
+			throw redirect(302, '/dashboard');
+
+		if (
+			!['Principal', 'Teacher'].includes(session?.user?.role as string) &&
+			event.url.pathname == '/dashboard/my/gradings'
+		) {
+			throw redirect(302, '/dashboard');
 		}
 
 		if (session.user?.role != 'Principal') {
