@@ -19,8 +19,8 @@
 		"@eslint/compat": "^1.2.5",
 		"@eslint/js": "^9.18.0",
 		"@playwright/test": "^1.49.1",
-		"@sveltejs/adapter-netlify": "^4.4.0",
-		"@sveltejs/kit": "^2.16.0",
+		"@sveltejs/adapter-netlify": "^0.0.13",
+		"@sveltejs/kit": "^2.20.1",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"@tailwindcss/container-queries": "^0.1.1",
 		"@tailwindcss/forms": "^0.5.10",
@@ -43,7 +43,7 @@
 	},
 	"dependencies": {
 		"@auth/pg-adapter": "^1.7.4",
-		"@auth/sveltekit": "^1.7.4",
+		"@auth/sveltekit": "^1.8.0",
 		"argon2": "^0.41.1",
 		"pg": "^8.13.1"
 	}
