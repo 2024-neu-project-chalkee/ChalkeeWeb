@@ -6,7 +6,7 @@
 <div class="island-col">
 	<h1>What would you like to do now, {$page.data.session?.user?.firstName}?</h1>
 	<div class="flex flex-col">
-		<div class="flex flex-col">
+		<div class="flex flex-col gap-2">
 			<h2 class="mb-2">Add data</h2>
 			<button
 				on:click={() => {
@@ -29,7 +29,8 @@
 				}}>Add a group to the groups of the institution</button
 			>
 		</div>
-		<div class="flex flex-col gap-2">
+		<div class="mt-4 flex flex-col gap-2">
+			<!-- This is so not done 😭 -->
 			<h2 class="mb-2">Delete data</h2>
 			<button
 				on:click={() => {

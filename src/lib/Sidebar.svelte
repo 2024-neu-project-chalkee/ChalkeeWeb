@@ -31,9 +31,15 @@
 			>
 			<button
 				on:click={() => {
+					goto('/dashboard/my/announcements');
+					if (w < 768) sidebarOpen.set(!$sidebarOpen);
+				}}>My Announcements</button
+			>
+			<button
+				on:click={() => {
 					goto('/dashboard/my/grades');
 					if (w < 768) sidebarOpen.set(!$sidebarOpen);
-				}}>Grades</button
+				}}>My Grades</button
 			>
 		{:else if $page.data.session.user?.role == 'Teacher'}
 			<button
@@ -44,9 +50,9 @@
 			>
 			<button
 				on:click={() => {
-					goto('/dashboard/my/gradings');
+					goto('/dashboard/my/announcements');
 					if (w < 768) sidebarOpen.set(!$sidebarOpen);
-				}}>Gradings</button
+				}}>My Announcements</button
 			>
 		{:else if $page.data.session.user?.role == 'Principal'}
 			<button
@@ -54,6 +60,12 @@
 					goto('/dashboard/my/timetables');
 					if (w < 768) sidebarOpen.set(!$sidebarOpen);
 				}}>My timetables</button
+			>
+			<button
+				on:click={() => {
+					goto('/dashboard/my/announcements');
+					if (w < 768) sidebarOpen.set(!$sidebarOpen);
+				}}>My Announcements</button
 			>
 			<button
 				on:click={() => {

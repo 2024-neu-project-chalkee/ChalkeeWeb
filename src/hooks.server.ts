@@ -22,6 +22,13 @@ export const authorizationHandle: Handle = async ({ event, resolve }) => {
 			throw redirect(302, '/dashboard');
 		}
 
+		if (
+			!['Principal', 'Teacher'].includes(session?.user?.role as string) &&
+			event.url.pathname.startsWith('/dashboard/my/announcements/new')
+		) {
+			throw redirect(302, '/dashboard');
+		}
+
 		if (session.user?.role != 'Principal') {
 			if (event.url.pathname.startsWith('/manage')) {
 				throw redirect(302, '/dashboard');

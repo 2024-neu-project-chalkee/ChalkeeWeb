@@ -57,6 +57,7 @@ div.forms label {
 }
 
 input:not(input[type='radio'], input[type='checkbox']),
+textarea,
 select {
 	@apply rounded-sm border border-neutral-700 bg-neutral-800 px-4 py-2 text-white duration-150 ease-in-out focus-visible:bg-neutral-900 !important;
 }
@@ -109,7 +110,7 @@ main:has(table) {
 	@apply mt-4;
 }
 
-.island-col div:has(button):not(:has(select)) {
+.island-col > div:has(button):not(:has(select)) {
 	@apply mt-4 flex flex-col flex-wrap gap-2 md:flex-row;
 }
 

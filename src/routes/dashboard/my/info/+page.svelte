@@ -13,7 +13,12 @@
 	<p>Name: {user?.firstName} {user?.lastName}</p>
 	<p>Email address: {user?.email}</p>
 	{#if user?.role == 'Student'}
-		<p>Your student ID: {user?.studentId}</p>
+		<p>
+			Your student ID: <span
+				class="rounded-sm bg-neutral-900 px-2 text-neutral-900 duration-150 ease-in-out hover:text-neutral-200"
+				>{user?.studentId}</span
+			>
+		</p>
 	{/if}
 	{#if $page.data.class}
 		{#if $page.data.session?.user?.role == 'Student'}
